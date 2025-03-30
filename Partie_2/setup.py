@@ -1,5 +1,6 @@
 import os, subprocess
 from dotenv import load_dotenv
+from azure.identity import ClientSecretCredential
 
 # Charger les variables depuis .env (secrets)
 load_dotenv()
@@ -20,3 +21,19 @@ sp_principal_id = os.getenv('SP1_ID')  # ID du SP Data Lake
 
     # URLs
 keyvault_url = f"https://{keyvault_name}.vault.azure.net/"
+
+def get_datalake_sp_credential():
+    """Connexion avec le Service Principal du Data Lake"""
+    return ClientSecretCredential(
+        tenant_id=os.getenv('TENANT_ID'),
+        client_id=os.getenv('SP1_ID'),  # Service Principal Data Lake
+        client_secret=os.getenv('SP1_SECRET')
+    )
+
+def get_keyvault_sp_credential():
+    """Connexion avec le Service Principal du Key Vault"""
+    return ClientSecretCredential(
+        tenant_id=os.getenv('TENANT_ID'),
+        client_id=os.getenv('SP2_ID'),  # Service Principal Key Vault
+        client_secret=os.getenv('SP2_SECRET')
+    )
